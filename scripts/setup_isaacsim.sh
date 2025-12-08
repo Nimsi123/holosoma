@@ -55,7 +55,7 @@ if [[ ! -f $SENTINEL_FILE ]]; then
   fi
   pip install -e $WORKSPACE_DIR/unitree_sdk2_python/
 
-  sudo apt install -y cmake build-essential
+  # sudo apt install -y cmake build-essential
   cd $WORKSPACE_DIR/IsaacLab
   # work-around for egl_probe cmake max version issue
   export CMAKE_POLICY_VERSION_MINIMUM=3.5
