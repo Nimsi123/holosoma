@@ -21,6 +21,8 @@ if [[ ! -f $SENTINEL_FILE ]]; then
   fi
 
   # Create the conda environment
+  echo hello $([[ ! -d $ENV_ROOT ]] && echo true || echo false)
+
   if [[ ! -d $ENV_ROOT ]]; then
     $CONDA_ROOT/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
     $CONDA_ROOT/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r

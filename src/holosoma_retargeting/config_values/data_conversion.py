@@ -10,7 +10,7 @@ from holosoma_retargeting.config_types.data_conversion import DataConversionConf
 def get_default_data_conversion_config(
     input_file: str,
     robot: Literal["g1", "t1"] = "g1",
-    data_format: Literal["lafan", "smplh", "mocap"] = "smplh",
+    data_format: Literal["lafan", "smplh", "mocap", "tt4d"] = "smplh",
     object_name: str | None = None,
     input_fps: int = 30,
     output_fps: int = 50,

@@ -306,7 +306,7 @@ def main(cfg: ParallelRetargetingConfig) -> None:
     task_type = cfg.task_type
 
     # Set defaults based on task type
-    data_format: Literal["lafan", "smplh", "mocap"] = cfg.data_format or cast(
+    data_format: Literal["lafan", "smplh", "mocap", "tt4d"] = cfg.data_format or cast(
         "Literal['lafan', 'smplh', 'mocap']", DEFAULT_DATA_FORMATS[task_type]
     )
     save_dir = cfg.save_dir if cfg.save_dir is not None else Path(PARALLEL_SAVE_DIRS[task_type].format(robot=robot))

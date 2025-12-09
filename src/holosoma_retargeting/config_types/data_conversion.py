@@ -20,7 +20,7 @@ class DataConversionConfig:
     robot: Literal["g1", "t1"] = "g1"
     """Robot model to use."""
 
-    data_format: Literal["lafan", "smplh", "mocap"] = "smplh"
+    data_format: Literal["lafan", "smplh", "mocap", "tt4d"] = "smplh"
     """Motion data format."""
 
     object_name: str | None = None

@@ -32,6 +32,7 @@ from holosoma_retargeting.src.interaction_mesh_retargeter import (  # noqa: E402
 from holosoma_retargeting.src.utils import (  # noqa: E402
     augment_object_poses,
     calculate_scale_factor,
+    calculate_scale_factor_tt4d,
     create_new_scene_xml_file,
     create_scaled_multi_boxes_urdf,
     create_scaled_multi_boxes_xml,
@@ -39,6 +40,7 @@ from holosoma_retargeting.src.utils import (  # noqa: E402
     extract_foot_sticking_sequence_velocity,
     extract_object_first_moving_frame,
     load_intermimic_data,
+    load_tt4d_data,
     load_object_data,
     preprocess_motion_data,
     transform_from_human_to_world,
@@ -73,7 +75,7 @@ _AUGMENTATION_TRANSLATION = np.array([0.2, 0.0, 0.0])
 
 # Type aliases
 TaskType = Literal["robot_only", "object_interaction", "climbing"]
-DataFormat = Literal["lafan", "smplh", "mocap"]
+DataFormat = Literal["lafan", "smplh", "tt4d", "mocap"]
 
 
 # ----------------------------- Helper Functions -----------------------------
@@ -144,8 +146,8 @@ def validate_config(cfg: RetargetingConfig) -> None:
         raise ValueError("Climbing task requires 'mocap' data format")
     if cfg.task_type == "object_interaction" and cfg.data_format not in (None, "smplh"):
         raise ValueError("Object interaction requires 'smplh' data format")
-    if cfg.task_type == "robot_only" and cfg.data_format not in (None, "lafan", "smplh", "mocap"):
-        raise ValueError("Robot-only task requires 'lafan' or 'smplh' or 'mocap' data format")
+    if cfg.task_type == "robot_only" and cfg.data_format not in (None, "lafan", "smplh", "tt4d", "mocap"):
+        raise ValueError("Robot-only task requires 'lafan', 'smplh', 'tt4d', or 'mocap' data format")
 
 
 def create_ground_points(x_range: tuple[float, float], y_range: tuple[float, float], size: int) -> np.ndarray:
@@ -223,6 +225,13 @@ def load_motion_data(
 
             default_human_height = motion_data_config.default_human_height or 1.78
             smpl_scale = constants.ROBOT_HEIGHT / default_human_height
+        elif data_format == "tt4d":
+            pt_path = data_path / f"{task_name}.pt"
+            if not pt_path.exists():
+                raise FileNotFoundError(f"InterMimic data file not found: {pt_path}")
+
+            human_joints, object_poses = load_tt4d_data(str(pt_path))
+            smpl_scale = calculate_scale_factor_tt4d(task_name, constants.ROBOT_HEIGHT)
 
         # Create dummy object poses for robot_only
         num_frames = human_joints.shape[0]

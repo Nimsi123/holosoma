@@ -35,6 +35,22 @@ def load_intermimic_data(file_path):
     return human_joints, object_poses
 
 
+def load_tt4d_data(file_path: str) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Load and preprocess TT4D (table tennis 4D) data.
+
+    Args:
+        file_path (str): Path to the .pt file containing TT4D data (pickled TT4D object).
+
+    Returns:
+        tuple: (human_joints, object_poses)
+            - human_joints: [T, 52, 3] SMPLH joint positions
+    """
+    human_joints = torch.load(file_path, map_location="cpu")
+    human_joints = human_joints.numpy()
+    return human_joints, None
+
+
 def calculate_scale_factor(task_name, robot_height):
     """Calculate scale factor based on human height."""
     with open("demo_data/height_dict.pkl", "rb") as f:
@@ -42,6 +58,11 @@ def calculate_scale_factor(task_name, robot_height):
     sub_name = task_name.split("_")[0]
     human_height = height_dict[sub_name]
     return robot_height / human_height
+
+
+def calculate_scale_factor_tt4d(task_name: str, robot_height: float, default_human_height: float = 1.75) -> float:
+    # Fall back to default human height
+    return robot_height / default_human_height
 
 
 def load_object_data(

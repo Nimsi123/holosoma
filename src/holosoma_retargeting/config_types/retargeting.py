@@ -27,7 +27,7 @@ class RetargetingConfig:
     robot: Literal["g1", "t1"] = "g1"
     """Robot type."""
 
-    data_format: Literal["lafan", "smplh", "mocap"] | None = None
+    data_format: Literal["lafan", "smplh", "mocap", "tt4d"] | None = None
     """Motion data format. Auto-determined by task_type if None."""
 
     task_name: str = "sub3_largebox_003"

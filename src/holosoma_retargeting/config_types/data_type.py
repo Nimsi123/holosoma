@@ -252,6 +252,7 @@ JOINTS_MAPPINGS = {
 TOE_NAMES_BY_FORMAT = {
     "lafan": ["LeftToeBase", "RightToeBase"],
     "smplh": ["L_Toe", "R_Toe"],
+    "tt4d": ["L_Toe", "R_Toe"],  # TT4D uses same joints as SMPLH after conversion
     "mocap": ["LeftToeBase", "RightToeBase"],
 }
 
@@ -269,6 +270,9 @@ DATA_FORMAT_CONSTANTS: dict[str, FormatConstants] = {
     "smplh": {
         "default_scale_factor": None,  # Calculated per subject
     },
+    "tt4d": {
+        "default_human_height": 1.75,  # Default for TT4D if not in height dict
+    },
     "mocap": {
         "default_human_height": 1.78,
     },
@@ -282,7 +286,7 @@ class MotionDataConfig:
     Uses properties instead of __post_init__ - much simpler!
     """
 
-    data_format: Literal["lafan", "smplh", "mocap"] = "smplh"
+    data_format: Literal["lafan", "smplh", "tt4d", "mocap"] = "smplh"
     robot_type: Literal["g1", "t1"] = "g1"
 
     # Optional overrides - if None, will use defaults from data_format
@@ -299,6 +303,8 @@ class MotionDataConfig:
             return LAFAN_DEMO_JOINTS
         if self.data_format == "smplh":
             return SMPLH_DEMO_JOINTS
+        if self.data_format == "tt4d":
+            return SMPLH_DEMO_JOINTS
         # mocap
         return MOCAP_DEMO_JOINTS
 
@@ -311,6 +317,12 @@ class MotionDataConfig:
         key = (self.data_format, self.robot_type)
         if key in JOINTS_MAPPINGS:
             return JOINTS_MAPPINGS[key]
+
+        # TT4D uses SMPLH joint layout after conversion, so reuse smplh mappings
+        if self.data_format == "tt4d":
+            smplh_key = ("smplh", self.robot_type)
+            if smplh_key in JOINTS_MAPPINGS:
+                return JOINTS_MAPPINGS[smplh_key]
 
         raise ValueError(f"No joint mapping found for data_format={self.data_format}, robot_type={self.robot_type}")
 
