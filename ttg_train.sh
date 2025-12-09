@@ -1,4 +1,4 @@
-source /bluesclues-data/home/pingpong-nima/.holosoma_deps/miniconda3/bin/activate hssim
+source ~/.holosoma_deps/miniconda3/bin/activate hssim
 
 # Velocity tracking
 # # G1 with FastSAC on IsaacGym
