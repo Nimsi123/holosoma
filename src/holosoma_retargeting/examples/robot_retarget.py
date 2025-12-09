@@ -232,6 +232,15 @@ def load_motion_data(
 
             human_joints, object_poses = load_tt4d_data(str(pt_path))
             smpl_scale = calculate_scale_factor_tt4d(task_name, constants.ROBOT_HEIGHT)
+        elif data_format == "motive_gameplay":
+            human_joints = np.load(str(npy_path))
+
+            # spine_joint_idx = constants.DEMO_JOINTS.index("Spine1")
+            # # LAFAN-specific spine adjustment
+            # human_joints[:, spine_joint_idx, -1] -= 0.06
+
+            default_human_height = motion_data_config.default_human_height or 1.78
+            smpl_scale = constants.ROBOT_HEIGHT / default_human_height
 
         # Create dummy object poses for robot_only
         num_frames = human_joints.shape[0]
