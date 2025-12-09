@@ -246,6 +246,8 @@ JOINTS_MAPPINGS = {
         "LeftFoot": "Ankle_Cross_Left",
         "RightFoot": "Ankle_Cross_Right",
     },
+    # Note: motive_gameplay uses LaFAN joint layout after motive21_to_lafan conversion,
+    # so it reuses lafan mappings via fallback in resolved_joints_mapping
 }
 
 # Data format specific constants
@@ -254,6 +256,7 @@ TOE_NAMES_BY_FORMAT = {
     "smplh": ["L_Toe", "R_Toe"],
     "tt4d": ["L_Toe", "R_Toe"],  # TT4D uses same joints as SMPLH after conversion
     "mocap": ["LeftToeBase", "RightToeBase"],
+    "motive_gameplay": ["LeftToeBase", "RightToeBase"],  # Uses LaFAN joint layout after conversion
 }
 
 
@@ -276,6 +279,9 @@ DATA_FORMAT_CONSTANTS: dict[str, FormatConstants] = {
     "mocap": {
         "default_human_height": 1.78,
     },
+    "motive_gameplay": {
+        "default_human_height": 1.75,  # Default height for Motive gameplay data
+    },
 }
 
 
@@ -286,7 +292,7 @@ class MotionDataConfig:
     Uses properties instead of __post_init__ - much simpler!
     """
 
-    data_format: Literal["lafan", "smplh", "tt4d", "mocap"] = "smplh"
+    data_format: Literal["lafan", "smplh", "tt4d", "mocap", "motive_gameplay"] = "smplh"
     robot_type: Literal["g1", "t1"] = "g1"
 
     # Optional overrides - if None, will use defaults from data_format
@@ -305,6 +311,8 @@ class MotionDataConfig:
             return SMPLH_DEMO_JOINTS
         if self.data_format == "tt4d":
             return SMPLH_DEMO_JOINTS
+        if self.data_format == "motive_gameplay":
+            return LAFAN_DEMO_JOINTS
         # mocap
         return MOCAP_DEMO_JOINTS
 
@@ -323,6 +331,12 @@ class MotionDataConfig:
             smplh_key = ("smplh", self.robot_type)
             if smplh_key in JOINTS_MAPPINGS:
                 return JOINTS_MAPPINGS[smplh_key]
+
+        # motive_gameplay uses LaFAN joint layout after motive21_to_lafan conversion
+        if self.data_format == "motive_gameplay":
+            lafan_key = ("lafan", self.robot_type)
+            if lafan_key in JOINTS_MAPPINGS:
+                return JOINTS_MAPPINGS[lafan_key]
 
         raise ValueError(f"No joint mapping found for data_format={self.data_format}, robot_type={self.robot_type}")
 

@@ -75,7 +75,7 @@ _AUGMENTATION_TRANSLATION = np.array([0.2, 0.0, 0.0])
 
 # Type aliases
 TaskType = Literal["robot_only", "object_interaction", "climbing"]
-DataFormat = Literal["lafan", "smplh", "tt4d", "mocap"]
+DataFormat = Literal["lafan", "smplh", "tt4d", "mocap", "motive_gameplay"]
 
 
 # ----------------------------- Helper Functions -----------------------------

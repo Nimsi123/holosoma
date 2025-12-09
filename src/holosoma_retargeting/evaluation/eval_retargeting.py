@@ -731,7 +731,7 @@ class Args:
     data_dir: Path
     data_type: Literal["robot_object", "robot_only", "robot_terrain"] = "robot_object"
     robot: Literal["g1", "t1"] = "g1"
-    data_format: Literal["lafan", "smplh", "mocap", "tt4d"] | None = None
+    data_format: Literal["lafan", "smplh", "mocap", "tt4d", "motive_gameplay"] | None = None
     object_name: str | None = None
     max_workers: int = 1
 
@@ -757,7 +757,7 @@ def main(cfg: Args) -> None:
 
     if cfg.motion_data_config.robot_type != cfg.robot or cfg.motion_data_config.data_format != data_format:
         cfg.motion_data_config = MotionDataConfig(
-            data_format=cast("Literal['lafan', 'smplh', 'mocap']", data_format),
+            data_format=cast("Literal['lafan', 'smplh', 'mocap', 'tt4d', 'motive_gameplay']", data_format),
             robot_type=cfg.robot,
         )
 
