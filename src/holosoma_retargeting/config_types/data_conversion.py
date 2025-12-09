@@ -46,3 +46,6 @@ class DataConversionConfig:
 
     use_omniretarget_data: bool = False
     """Use OmniRetarget data format."""
+
+    no_viewer: bool = False
+    """Run without MuJoCo viewer (for headless environments without display)."""
