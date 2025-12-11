@@ -37,18 +37,7 @@ if [[ ! -f $SENTINEL_FILE ]]; then
   conda install -c conda-forge -y libiconv
   conda install -c conda-forge -y libglu
 
-  # # Below follows https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/pip_installation.html
-  # # Install IsaacSim
-  # pip install --upgrade pip
-  # # Pinning triton version. It's a dep of a dep, but seeing issues with 3.4.0+
-  # pip install torch==2.5.1 torchvision==0.20.1 triton==3.1.0 --index-url https://download.pytorch.org/whl/cu118
-  # # Install dependencies from PyPI first
-  # pip install pyperclip
-  # # Then install isaacsim from NVIDIA index only
-  # pip install 'isaacsim[all,extscache]==4.5.0' --index-url https://pypi.org/simple
-
-  # Below follows https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/pip_installation.html
-
+  # 5090 installation
   # Install IsaacSim
   pip install --upgrade pip
   # *** CHANGED: install PyTorch 2.7.0 + cu128 instead of 2.5.1 + cu118 ***
