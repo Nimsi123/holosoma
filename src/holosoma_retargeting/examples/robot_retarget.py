@@ -146,7 +146,7 @@ def validate_config(cfg: RetargetingConfig) -> None:
         raise ValueError("Climbing task requires 'mocap' data format")
     if cfg.task_type == "object_interaction" and cfg.data_format not in (None, "smplh"):
         raise ValueError("Object interaction requires 'smplh' data format")
-    if cfg.task_type == "robot_only" and cfg.data_format not in (None, "lafan", "smplh", "tt4d", "mocap"):
+    if cfg.task_type == "robot_only" and cfg.data_format not in (None, "lafan", "smplh", "tt4d", "mocap", "motive_gameplay"):
         raise ValueError("Robot-only task requires 'lafan', 'smplh', 'tt4d', or 'mocap' data format")
 
 
@@ -233,7 +233,9 @@ def load_motion_data(
             human_joints, object_poses = load_tt4d_data(str(pt_path))
             smpl_scale = calculate_scale_factor_tt4d(task_name, constants.ROBOT_HEIGHT)
         elif data_format == "motive_gameplay":
-            human_joints = np.load(str(npy_path))
+            import torch
+            npy_file = data_path / f"{task_name}.pt"
+            human_joints = torch.load(str(npy_file)).numpy()
 
             # spine_joint_idx = constants.DEMO_JOINTS.index("Spine1")
             # # LAFAN-specific spine adjustment
