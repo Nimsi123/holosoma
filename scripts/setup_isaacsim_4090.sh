@@ -94,6 +94,10 @@ if [[ ! -f $SENTINEL_FILE ]]; then
 
   # Force upgrade wandb to override rl-games constraint
   pip install --upgrade 'wandb>=0.21.1'
+
+  # add missing installs
+  pip install cvxpy mujoco viser smplx
+
   touch $SENTINEL_FILE
 fi
 
@@ -186,5 +190,9 @@ if [[ ! -f $SENTINEL_FILE ]]; then
 
   # Force upgrade wandb to override rl-games constraint
   pip install --upgrade 'wandb>=0.21.1'
+
+  # add missing installs
+  pip install cvxpy mujoco viser smplx
+
   touch $SENTINEL_FILE
 fi

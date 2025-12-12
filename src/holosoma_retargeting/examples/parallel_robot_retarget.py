@@ -85,6 +85,9 @@ def find_files(data_dir: Path, data_format: str, object_name: str | None = None)
         # MOCAP: .npy files in subdirectories
         files = [str(p) for p in data_dir.glob("*/*.npy")]
         return sorted(files)
+    if data_format == "tt4d":
+        files = [str(p) for p in data_dir.glob("*.pt")]
+        return sorted(files)
     raise ValueError(f"Invalid data format: {data_format}")
 
 
