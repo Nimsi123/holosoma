@@ -34,6 +34,7 @@ from utils import (  # type: ignore[import-not-found,no-redef]  # noqa: E402
 )
 from viser_utils import create_motion_control_sliders  # type: ignore[import-not-found,no-redef]  # noqa: E402
 
+from foot_flat_cost import make_soft_flat_feet_cost
 
 class InteractionMeshRetargeter:
     """
@@ -594,6 +595,19 @@ class InteractionMeshRetargeter:
         obj_terms = []
 
         obj_terms.append(cp.sum_squares(cp.multiply(sqrt_w3, lap_var - target_lap_vec)))
+
+        flat_cost = make_soft_flat_feet_cost(
+            robot_model=self.robot_model,
+            robot_data=self.robot_data,
+            foot_links=self.foot_links,                      # {key: mujoco_body_name}
+            foot_sticking_flags={"left": bool(foot_sticking[left_key]), "right": bool(foot_sticking[right_key])},
+            q_a_indices=self.q_a_indices,
+            dqa=dqa,
+            active=self.activate_foot_sticking,
+            calc_contact_jacobian_from_point=self._calc_contact_jacobian_from_point,
+        )
+
+        obj_terms.append(flat_cost)
 
         # nominal tracking for selected indices
         if (w_nominal_tracking > 0) and (q_a_nominal is not None):

@@ -18,4 +18,4 @@ source ~/.holosoma_deps/miniconda3/bin/activate hssim
 
 # debug
 python viser_player.py --robot_urdf models/g1/g1_29dof.urdf \
-    --qpos_npz "/home/nima/holosoma/src/holosoma_retargeting/demo_results_parallel/g1/robot_only/motive_gameplay/Take_2025-09-30_03.38.11_PM_part000_9_4_original.npz"
+    --qpos_npz "/home/nima/holosoma/src/holosoma_retargeting/demo_results_parallel/g1/robot_only/motive_gameplay/Take_2025-09-30_03.38.11_PM_part000_9_2_original.npz"
