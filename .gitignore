@@ -26,3 +26,5 @@ src/holosoma_retargeting/converted_res_parallel/
 __pycache__
 
 src/holosoma_retargeting/MUJOCO_LOG.TXT
+
+src/holosoma_retargeting/demo_data/tt4d_mixtape/
