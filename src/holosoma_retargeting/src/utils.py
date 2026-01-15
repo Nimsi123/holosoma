@@ -252,11 +252,21 @@ def preprocess_motion_data(
         retargeter.demo_joints.index(foot_names[0]),
         retargeter.demo_joints.index(foot_names[1]),
     ]
+    # import pdb; pdb.set_trace()
     z_min = human_joints[:, toe_indices, 2].min()
-    if z_min >= mat_height:
-        # On a mat.
-        z_min -= mat_height
-    human_joints[:, :, 2] -= z_min
+
+    # HOLOSOMA vertical adjustment
+    # if z_min >= mat_height:
+    #     # On a mat.
+    #     z_min -= mat_height
+    # human_joints[:, :, 2] -= z_min
+
+    # NIMA vertical adjustment
+    ankle_indices = [3, 7]
+    human_joints[:, :, 2] -= human_joints[:, ankle_indices, 2].min(axis=1)[:, None]
+    human_joints[:, :, 2] -= human_joints[:, toe_indices, 2].min(axis=1)[:, None]
+    
+
 
     # Scale human joints
     human_joints = human_joints * scale
