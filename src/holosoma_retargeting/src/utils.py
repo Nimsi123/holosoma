@@ -257,8 +257,9 @@ def preprocess_motion_data(
     # import pdb; pdb.set_trace()
     # human_joints[:, :, 2] -= z_min
 
-    human_joints[:, toe_indices[0], 2] -= np.percentile(human_joints[:, toe_indices[0], 2], 50)
-    human_joints[:, toe_indices[1], 2] -= np.percentile(human_joints[:, toe_indices[1], 2], 50)
+    # genmo-specific adjustment
+    human_joints[:, toe_indices[0], 2] -= np.percentile(human_joints[:, toe_indices[0], 2], 70)
+    human_joints[:, toe_indices[1], 2] -= np.percentile(human_joints[:, toe_indices[1], 2], 70)
 
     # Scale human joints
     human_joints = human_joints * scale
