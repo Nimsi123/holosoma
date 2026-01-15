@@ -26,5 +26,10 @@ source ~/.holosoma_deps/miniconda3/bin/activate hssim
 # python viser_player.py --robot_urdf models/g1/g1_29dof.urdf \
 #     --qpos_npz /bluesclues-data/home/pingpong-nima/holosoma/src/holosoma_retargeting/demo_results_parallel/g1/robot_only/tt4d_mixtape_genmo/batch_clipped_long_2_wCo9atjANTo_219320_219990_3_9_1_7_0_genmo_original.npz
 
+# python viser_player.py --robot_urdf models/g1/g1_29dof.urdf \
+#     --qpos_npz /bluesclues-data/home/pingpong-nima/holosoma/src/holosoma_retargeting/demo_results_parallel/g1/robot_only/tt4d_mixtape_genmo/batch_clipped_long_2_wCo9atjANTo_403565_404205_1_2_2_0_0_genmo_original.npz
+
+# test files
+
 python viser_player.py --robot_urdf models/g1/g1_29dof.urdf \
-    --qpos_npz /bluesclues-data/home/pingpong-nima/holosoma/src/holosoma_retargeting/demo_results_parallel/g1/robot_only/tt4d_mixtape_genmo/batch_clipped_long_2_wCo9atjANTo_403565_404205_1_2_2_0_0_genmo_original.npz
+    --qpos_npz /bluesclues-data/home/pingpong-nima/robot_table_tennis/src/humanoid_mixtape/test_tracking/test_data/batch_clipped_long_1_65ces61EZhM_182173_182778_0_1_2_8_0_genmo/holosoma_retarget.npz

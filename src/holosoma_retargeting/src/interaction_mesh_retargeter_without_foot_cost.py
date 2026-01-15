@@ -34,8 +34,6 @@ from utils import (  # type: ignore[import-not-found,no-redef]  # noqa: E402
 )
 from viser_utils import create_motion_control_sliders  # type: ignore[import-not-found,no-redef]  # noqa: E402
 
-from foot_flat_cost import make_soft_flat_feet_cost
-from foot_orientation_cost import make_feet_pointing_down_cost, calc_rotation_jacobian_mujoco
 
 class InteractionMeshRetargeter:
     """
@@ -179,6 +177,8 @@ class InteractionMeshRetargeter:
 
         # Create parent frames for robot and object
         self.robot_base = self.server.scene.add_frame("/world/robot", show_axes=False)
+
+        print("robot_model_path: ", self.robot_model_path)
 
         # Load robot URDF
         self.robot_urdf = yourdfpy.URDF.load(
@@ -596,19 +596,6 @@ class InteractionMeshRetargeter:
         obj_terms = []
 
         obj_terms.append(cp.sum_squares(cp.multiply(sqrt_w3, lap_var - target_lap_vec)))
-
-        # Feet pointing down cost - ALWAYS active to ensure feet stay flat
-        # weight: lower = softer (e.g., 1.0 soft, 10.0 moderate, 50.0 strong)
-        feet_orientation_cost = make_feet_pointing_down_cost(
-            robot_model=self.robot_model,
-            robot_data=self.robot_data,
-            foot_links=self.foot_links,
-            q_a_indices=self.q_a_indices,
-            dqa=dqa,
-            weight=5.0,  # Soft penalty
-            calc_rotation_jacobian=self._calc_rotation_jacobian,
-        )
-        obj_terms.append(feet_orientation_cost)
 
         # nominal tracking for selected indices
         if (w_nominal_tracking > 0) and (q_a_nominal is not None):
@@ -1062,23 +1049,6 @@ class InteractionMeshRetargeter:
         T = self._build_transform_qdot_to_qvel_fast()
 
         return Jp @ T
-
-    def _calc_rotation_jacobian(self, body_idx: int):
-        """
-        Rotational Jacobian Jr(q) (3 x nq) such that
-        omega_world = Jr(q) @ qdot.
-        """
-        # Use body position for the Jacobian computation
-        point = self.robot_data.xpos[body_idx].reshape(3, 1).astype(np.float64)
-
-        # Get rotational Jacobian wrt generalized velocities
-        Jp = np.zeros((3, self.robot_model.nv), dtype=np.float64, order="C")
-        Jr = np.zeros((3, self.robot_model.nv), dtype=np.float64, order="C")
-        mujoco.mj_jac(self.robot_model, self.robot_data, Jp, Jr, point, int(body_idx))
-
-        T = self._build_transform_qdot_to_qvel_fast()
-
-        return Jr @ T
 
     def _calc_manipulator_jacobians(
         self,
