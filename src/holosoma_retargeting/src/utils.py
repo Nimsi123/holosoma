@@ -252,14 +252,11 @@ def preprocess_motion_data(
         retargeter.demo_joints.index(foot_names[0]),
         retargeter.demo_joints.index(foot_names[1]),
     ]
-    # z_min = human_joints[:, toe_indices, 2].min()
-    # z_min = np.percentile(human_joints[:, toe_indices, 2], 50)
-    # import pdb; pdb.set_trace()
-    # human_joints[:, :, 2] -= z_min
-
-    # genmo-specific adjustment
-    human_joints[:, toe_indices[0], 2] -= np.percentile(human_joints[:, toe_indices[0], 2], 70)
-    human_joints[:, toe_indices[1], 2] -= np.percentile(human_joints[:, toe_indices[1], 2], 70)
+    z_min = human_joints[:, toe_indices, 2].min()
+    if z_min >= mat_height:
+        # On a mat.
+        z_min -= mat_height
+    human_joints[:, :, 2] -= z_min
 
     # Scale human joints
     human_joints = human_joints * scale
