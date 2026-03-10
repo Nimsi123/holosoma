@@ -94,7 +94,7 @@ def find_motion_subdirs(data_dir: Path, motion_filename: str) -> list[tuple[Path
 
     for subdir in sorted(data_dir.iterdir()):
         if subdir.is_dir():
-            motion_file = subdir / motion_filename
+            motion_file = subdir / 'pt' / motion_filename
             if motion_file.exists():
                 results.append((motion_file, subdir))
 
@@ -123,7 +123,7 @@ def process_single_motion(args: tuple) -> None:
     motion_file = Path(motion_file)
     save_dir = Path(save_dir)
     task_name = motion_file.stem  # e.g., "motion_genmo"
-    output_path = save_dir / output_filename
+    output_path = save_dir / 'npz' / output_filename
 
     print(f"Processing: {motion_file.parent.name}/{motion_file.name}")
 
