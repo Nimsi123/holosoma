@@ -171,6 +171,12 @@ def process_single_task(args):
         task_name = extract_task_name(file_path)
     print(f"Processing: {task_name}")
 
+    # Fast skip: if every augmentation output already exists, avoid loading motion data.
+    augmentations_to_check = generate_augmentation_configs(task_type, augmentation)
+    if all(Path(f"{save_dir}/{task_name}_{aug['name']}.npz").exists() for aug in augmentations_to_check):
+        print(f"[skip] {task_name} (all outputs exist)")
+        return
+
     # Task-specific object setup: set default object_dir for climbing if not provided
     if task_type == "climbing" and task_config.object_dir is None:
         from dataclasses import replace

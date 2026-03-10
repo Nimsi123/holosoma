@@ -31,3 +31,10 @@ __pycache__
 src/holosoma_retargeting/MUJOCO_LOG.TXT
 
 src/holosoma_retargeting/demo_data/tt4d_mixtape/
+
+src/holosoma_retargeting/demo_data/lafan*
+
+src/holosoma_retargeting/data_utils/ubisoft-laforge-animation-dataset/
+
+
+src/holosoma_retargeting/demo_data/lafan*
