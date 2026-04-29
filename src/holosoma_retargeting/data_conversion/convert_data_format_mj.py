@@ -516,7 +516,8 @@ def run_simulator(joint_names: list[str]):
             viewer.sync()
 
         end_time = time.perf_counter()
-        time.sleep(max(0, motion.output_dt - (end_time - start_time)))
+        if viewer is not None:  # only rate-limit when viewer is active
+            time.sleep(max(0, motion.output_dt - (end_time - start_time)))
 
         if not file_saved:
             lin_vel_w, ang_vel_w = world_body_velocities(robot, robot_data)
@@ -526,12 +527,17 @@ def run_simulator(joint_names: list[str]):
                 log["object_lin_vel_w"].append(robot_data.qvel[-6:-3].copy())
                 log["object_ang_vel_w"].append(robot_data.qvel[-3:].copy())
 
-                # Remove object field from qpos and qvel
-                log["joint_pos"].append(robot_data.qpos[:-7].copy())
-                log["joint_vel"].append(robot_data.qvel[:-6].copy())
+                # Strip root free-joint DOFs (7 qpos / 6 qvel) and object DOFs.
+                # qpos layout: [root_pos(3), root_quat(4), joints(N), obj_pos(3), obj_quat(4)]
+                # qvel layout: [root_linvel(3), root_angvel(3), joints(N), obj_linvel(3), obj_angvel(3)]
+                log["joint_pos"].append(robot_data.qpos[7:-7].copy())
+                log["joint_vel"].append(robot_data.qvel[6:-6].copy())
             else:
-                log["joint_pos"].append(robot_data.qpos[:].copy())
-                log["joint_vel"].append(robot_data.qvel[:].copy())
+                # Strip root free-joint DOFs so joint_pos aligns with joint_names.
+                # qpos layout: [root_pos(3), root_quat(4), joints(N)]
+                # qvel layout: [root_linvel(3), root_angvel(3), joints(N)]
+                log["joint_pos"].append(robot_data.qpos[7:].copy())
+                log["joint_vel"].append(robot_data.qvel[6:].copy())
 
             log["body_pos_w"].append(robot_data.xpos[:].copy())
             log["body_quat_w"].append(robot_data.xquat[:].copy())

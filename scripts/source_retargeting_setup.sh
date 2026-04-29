@@ -5,4 +5,4 @@ elif [ -n "${ZSH_VERSION}" ]; then
     SCRIPT_DIR=$( cd -- "$( dirname -- "${(%):-%x}" )" &> /dev/null && pwd )
 fi
 source ${SCRIPT_DIR}/source_common.sh
-source ${CONDA_ROOT}/bin/activate hsretargeting
+source ${CONDA_ROOT}/bin/activate hssim
