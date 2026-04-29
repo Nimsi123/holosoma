@@ -123,14 +123,15 @@ def process_single_motion(args: tuple) -> None:
     motion_file = Path(motion_file)
     save_dir = Path(save_dir)
     task_name = motion_file.stem  # e.g., "motion_genmo"
+    os.makedirs(save_dir / 'npz', exist_ok=True)
     output_path = save_dir / 'npz' / output_filename
 
     print(f"Processing: {motion_file.parent.name}/{motion_file.name}")
 
-    # Skip if output already exists
-    if output_path.exists():
-        print(f"  Skipping (output exists): {output_path}")
-        return
+    # # Skip if output already exists
+    # if output_path.exists():
+    #     print(f"  Skipping (output exists): {output_path}")
+    #     return
 
     # Create task constants
     constants = create_task_constants(robot_config, motion_data_config, task_config, task_type)
@@ -239,6 +240,9 @@ def main(cfg: TestDataRetargetingConfig) -> None:
     start_time = time.time()
     successful = 0
     failed = 0
+
+    # # test
+    # process_single_motion(process_args[0])
 
     # Process files in parallel
     with ProcessPoolExecutor(max_workers=max_workers) as executor:
